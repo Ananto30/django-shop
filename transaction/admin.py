@@ -7,7 +7,6 @@ from jet.admin import CompactInline
 from .models import Purchase, Supplier, PurchaseProduct, Sale, SaleProduct
 from product.models import Product
 from django.contrib.admin import DateFieldListFilter
-from jet.filters import RelatedFieldAjaxListFilter, DateRangeFilter
 
 
 class PurchaseProductAdminInline(admin.StackedInline):
