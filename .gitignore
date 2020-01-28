@@ -1,7 +1,8 @@
 venv/
-.idea/
-db.json
-.DS_Store
 db.sqlite3
 **/__pycache__/
-**/migrations/
+
+
+.idea/
+.DS_Store
+.vscode/

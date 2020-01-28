@@ -9,7 +9,7 @@ from product.models import Product
 from django.contrib.admin import DateFieldListFilter
 
 
-class PurchaseProductAdminInline(admin.StackedInline):
+class PurchaseProductAdminInline(admin.TabularInline):
     exclude = ['sold_quantity']
     model = PurchaseProduct
     extra = 1
@@ -51,7 +51,7 @@ class SaleAdmin(admin.ModelAdmin):
     ]
     exclude = ['sold_quantity']
 
-    list_display = ('date',)
+    list_display = ('date', 'items')
 
     def get_readonly_fields(self, request, obj=None):
         if not request.user.is_superuser and request.user.has_perm('sale.read_item'):

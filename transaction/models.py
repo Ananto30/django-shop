@@ -21,7 +21,7 @@ class Supplier(models.Model):
 
 class Purchase(models.Model):
     date = models.DateTimeField('Purchased at', default=now)
-    supplier_id = models.ForeignKey(Supplier, on_delete=None)
+    supplier_id = models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.date.strftime("%d-%m-%Y %I:%M %p")
@@ -31,7 +31,7 @@ class Purchase(models.Model):
 
 
 class PurchaseProduct(models.Model):
-    purchase_id = models.ForeignKey(Purchase, on_delete=None)
+    purchase_id = models.ForeignKey(Purchase, on_delete=models.SET_NULL, null=True)
     product_uuid = models.CharField(max_length=20)
     quantity = models.IntegerField(null=False)
     sold_quantity = models.IntegerField(default=0)
@@ -51,9 +51,14 @@ class Sale(models.Model):
             ('read_item', 'Can read item'),
         )
 
+    @property
+    def items(self):
+        products = self.saleproduct_set.all()
+        return ', '.join([p.product_uuid for p in products])
+
 
 class SaleProduct(models.Model):
-    sale_id = models.ForeignKey(Sale, on_delete=None)
+    sale_id = models.ForeignKey(Sale, on_delete=models.SET_NULL, null=True)
     product_uuid = models.CharField(max_length=20)
     quantity = models.IntegerField(null=False)
 

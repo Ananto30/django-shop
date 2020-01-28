@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.admin',
 
     'rest_framework.authtoken',
+
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
