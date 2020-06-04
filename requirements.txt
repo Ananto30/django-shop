@@ -18,7 +18,7 @@ pkg-resources==0.0.0
 pyparsing==2.4.6
 pytz==2018.7
 requests==2.21.0
-ruamel.yaml==0.16.6
+ruamel.yaml==0.16.10
 ruamel.yaml.clib==0.2.0
 simplejson==3.16.0
 six==1.14.0
