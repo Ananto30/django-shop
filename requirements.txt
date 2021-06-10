@@ -2,7 +2,7 @@ certifi==2018.11.29
 chardet==3.0.4
 coreapi==2.3.3
 coreschema==0.0.4
-Django==2.2.20
+Django==2.2.24
 django-jet==1.0.8
 djangorestframework==3.11.2
 drf-yasg==1.17.0
