@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'product',
     'transaction',
 
-    'jet.dashboard',
-    'jet',
+    # 'jet.dashboard',
+    # 'jet',
     'django.contrib.admin',
 
     'rest_framework.authtoken',
