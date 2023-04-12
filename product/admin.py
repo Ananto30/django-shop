@@ -2,11 +2,20 @@ from django.contrib import admin
 from django.contrib.admin.models import LogEntry
 from django.urls import reverse
 from django.utils.html import format_html
-from .models import Product, Category, Attribute, ProductSKUs, AttributeValues, SKUValues
+
 from transaction.models import Purchase
 
+from .models import (
+    Attribute,
+    AttributeValues,
+    Category,
+    Product,
+    ProductSKUs,
+    SKUValues,
+)
 
 # Register your models here.
+
 
 # class SupplierAdmin(admin.TabularInline):
 #     model = Supplier
@@ -22,15 +31,15 @@ class ProductSKUsAdmin(admin.ModelAdmin):
         SKUValuesAdmin,
     ]
 
-    list_display = ('product_id', 'product_uuid')
+    list_display = ("product", "product_code")
 
 
 class ProductAdmin(admin.ModelAdmin):
     # fieldsets = (
     #     ('Product Information', {'fields': ('name', 'category_id')}),
     # )
-    list_display = ('name', 'id', 'category_name')
-    search_fields = ('id', 'name')
+    list_display = ("name", "category_name")
+    search_fields = ("name",)
 
     def category_name(self, obj):
         return obj.category_id.name
@@ -58,12 +67,21 @@ class ProductAdmin(admin.ModelAdmin):
 
 class LogEntryAdmin(admin.ModelAdmin):
     list_display_links = None
-    list_display = ('__str__', 'get_edited_object', 'object_id', 'action_time', 'user', 'content_type',
-                    'show_url')
+    list_display = (
+        "__str__",
+        "get_edited_object",
+        "object_id",
+        "action_time",
+        "user",
+        "content_type",
+        "show_url",
+    )
 
     def show_url(self, obj):
-        url = reverse('admin:{}_{}_change'.format(obj.content_type.app_label, obj.content_type.model),
-                      args=(obj.object_id,))
+        url = reverse(
+            f"admin:{obj.content_type.app_label,}_{obj.content_type.model}_change",
+            args=(obj.object_id,),
+        )
         return format_html("<a href='{}'>See {}</a>", url, obj.object_id)
 
     show_url.allow_tags = True
@@ -73,7 +91,7 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 
 class SupplierAdmin(admin.ModelAdmin):
-    exclude = None
+    exclude = None  # type: ignore
 
 
 # models = [Product, Supplier]

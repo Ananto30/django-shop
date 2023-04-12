@@ -3,61 +3,93 @@ import uuid
 from django.db import models
 
 
+def unique_id():
+    return uuid.uuid4().hex.upper()[0:6]
+
+
 class Category(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(
+        max_length=50,
+        unique=True,
+        primary_key=True,
+        help_text="e.g. 'Fruits', 'Clothes' etc.",
+    )
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 
 class Product(models.Model):
-    # id = models.CharField(max_length=10, unique=True, primary_key=True)
-    name = models.CharField(max_length=250)
-    image = models.ImageField(blank=True, null=True, upload_to="products")
-    category_id = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(
+        max_length=250,
+        primary_key=True,
+        help_text="'Apple', 'Banana', 'T-Shirt' etc.",
+    )
+    image = models.ImageField(
+        blank=True,
+        null=True,
+        upload_to="products",
+        help_text="Better to upload small size images",
+    )
+    category = models.ForeignKey(Category, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "{} - {}".format(self.name, self.category_id)
+        return f"{self.name} - {self.category}"
 
 
 class Attribute(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-    unit = models.CharField(max_length=50, blank=True)
+    name = models.CharField(
+        max_length=50,
+        unique=True,
+        primary_key=True,
+        help_text="e.g. 'Color', 'Size' etc.",
+    )
+    unit = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="e.g. 'Kg', 'Litre' etc. It can be left blank.",
+    )
 
     def __str__(self):
-        return "{} - {}".format(self.name, self.unit)
+        return f"{self.name} - {self.unit}"
 
 
 class AttributeValues(models.Model):
     # value_id = models.IntegerField(unique=True, primary_key=True)
     # product_id = models.ForeignKey(Product, on_delete=None)
-    attribute_id = models.ForeignKey(Attribute, on_delete=models.SET_NULL, null=True)
-    value = models.CharField(max_length=200)
+    attribute = models.ForeignKey(Attribute, on_delete=models.RESTRICT)
+    value = models.CharField(
+        max_length=200,
+        help_text="e.g. 'Red', 'Green', 'Small', 1, 5 etc.",
+    )
 
     def __str__(self):
-        return "{} - {}".format(self.attribute_id.name, self.value)
-
-
-# if default takes a function, it will call it every time when initiated
-def f():
-    d = uuid.uuid4()
-    string = d.hex
-    return string[0:6].upper()
+        return f"{self.attribute.name} - {self.value}"
 
 
 class ProductSKUs(models.Model):
-    product_id = models.ForeignKey(Product, related_name="product_skus", on_delete=models.SET_NULL, null=True)
-    product_uuid = models.CharField(max_length=20, unique=True, default=f)
+    product = models.ForeignKey(
+        Product, related_name="product_skus", on_delete=models.RESTRICT
+    )
+    product_code = models.CharField(
+        max_length=20,
+        unique=True,
+        default=unique_id,
+        editable=False,
+        help_text="Auto generated unique code",
+    )
 
     def __str__(self):
-        return "{}".format(self.product_uuid)
+        return f"{self.product} - {self.product_code}"
 
 
 class SKUValues(models.Model):
-    product_id = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    sku_id = models.ForeignKey(ProductSKUs, related_name="sku_values", on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.RESTRICT)
+    sku = models.ForeignKey(
+        ProductSKUs, related_name="sku_values", on_delete=models.RESTRICT
+    )
     # attribute_id = models.ForeignKey(Attribute, on_delete=None)
-    value_id = models.ForeignKey(AttributeValues, on_delete=models.SET_NULL, null=True)
+    attribute_value = models.ForeignKey(AttributeValues, on_delete=models.RESTRICT)
 
     def __str__(self):
-        return "{} || {}".format(self.product_id, self.value_id)
+        return f"{self.product} || {self.attribute_value}"

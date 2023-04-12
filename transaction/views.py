@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-
 # Create your views here.
+
 
 def sale(request):
     # projects = Project.objects.order_by('-date')

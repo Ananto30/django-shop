@@ -6,3 +6,6 @@ db.sqlite3
 .idea/
 .DS_Store
 .vscode/
+
+.mypy_cache/
+.pytest_cache/

@@ -1,7 +1,13 @@
-import json
-
 from rest_framework import serializers
-from .models import Product, Category, Attribute, AttributeValues, ProductSKUs, SKUValues
+
+from .models import (
+    Attribute,
+    AttributeValues,
+    Category,
+    Product,
+    ProductSKUs,
+    SKUValues,
+)
 
 
 class ShowProductSerializer(serializers.ModelSerializer):
@@ -11,7 +17,7 @@ class ShowProductSerializer(serializers.ModelSerializer):
         model = Product
         # fields = ("name", "image", "category_id")
         # exclude = ("id",)
-        fields = '__all__'
+        fields = "__all__"
         depth = 1
 
 
@@ -20,13 +26,13 @@ class CreateProductSerializer(serializers.ModelSerializer):
         model = Product
         # fields = ("name", "image", "category_id")
         # exclude = ("id",)
-        fields = '__all__'
+        fields = "__all__"
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = "__all__"
 
 
 class CreateAttribute(serializers.ModelSerializer):
@@ -45,13 +51,13 @@ class CreateProductVariant(serializers.ModelSerializer):
 
     class Meta:
         model = ProductSKUs
-        fields = ('product_id', 'attributes', 'attribute_values')
+        fields = ("product_id", "attributes", "attribute_values")
 
 
 class ShowSkuValues(serializers.ModelSerializer):
     class Meta:
         model = SKUValues
-        fields = ('value_id',)
+        fields = ("value_id",)
         depth = 2
 
 
@@ -61,13 +67,14 @@ class ShowProductSkuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductSKUs
-        fields = ('product_id', 'product_uuid', 'sku_values')
+        fields = ("product_id", "product_uuid", "sku_values")
         depth = 1
 
 
 class ShowProductVariant(serializers.Serializer):
     # sku_values = ShowSkuValues(many=True)
     product_sku = ShowProductSkuSerializer(many=True)
+
 
 # class CreateProductVariant(serializers.Serializer):
 #     name = serializers.CharField(required=True)
